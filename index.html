@@ -33,6 +33,15 @@
             </svg>
         </button>
 
+        <!-- Language Toggle -->
+        <button id="lang-toggle" class="lang-btn" aria-label="Toggle Language">
+            <span class="lang-text">KO</span>
+        </button>
+
+
+
+
+
         <!-- View Toggle -->
         <div class="view-toggle">
             <button id="toggle-analog" class="toggle-btn" aria-label="Analog View">
@@ -71,7 +80,7 @@
                     </div>
                     <span class="separator">:</span>
                     <div class="input-group">
-                        <input type="number" id="input-minutes" placeholder="25" min="0" max="59">
+                        <input type="number" id="input-minutes" placeholder="00" min="0" max="59">
                         <span class="label">min</span>
                     </div>
                     <span class="separator">:</span>
@@ -116,20 +125,37 @@
                     <button id="add-plan-btn" class="add-plan-btn">+</button>
                 </div>
 
-                <div class="planner-table-container">
-                    <table id="planner-table">
-                        <thead>
-                            <tr>
-                                <th>When</th>
-                                <th>Time</th>
-                                <th>What</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody id="planner-list">
-                            <!-- Plans go here -->
-                        </tbody>
-                    </table>
+                <div class="planner-timetable">
+                    <div class="timetable-grid">
+                        <div class="day-column" data-day="Mon">
+                            <div class="day-header">Mon</div>
+                            <div class="day-content"></div>
+                        </div>
+                        <div class="day-column" data-day="Tue">
+                            <div class="day-header">Tue</div>
+                            <div class="day-content"></div>
+                        </div>
+                        <div class="day-column" data-day="Wed">
+                            <div class="day-header">Wed</div>
+                            <div class="day-content"></div>
+                        </div>
+                        <div class="day-column" data-day="Thu">
+                            <div class="day-header">Thu</div>
+                            <div class="day-content"></div>
+                        </div>
+                        <div class="day-column" data-day="Fri">
+                            <div class="day-header">Fri</div>
+                            <div class="day-content"></div>
+                        </div>
+                        <div class="day-column" data-day="Sat">
+                            <div class="day-header">Sat</div>
+                            <div class="day-content"></div>
+                        </div>
+                        <div class="day-column" data-day="Sun">
+                            <div class="day-header">Sun</div>
+                            <div class="day-content"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -141,7 +167,7 @@
             <div class="timer-display-container">
                 <!-- Digital Timer -->
                 <div id="digital-display" class="timer-view active">
-                    <span id="time-remaining">25:00</span>
+                    <span id="time-remaining">00:00</span>
                 </div>
 
                 <!-- Analog Timer -->
