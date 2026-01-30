@@ -1,3 +1,4 @@
+
 class Timer {
     constructor() {
         this.duration = 0; // in seconds
@@ -63,6 +64,46 @@ class Timer {
         this.moonIcon = document.querySelector('.moon-icon');
         this.isDark = false;
 
+        this.plans = []; // Store plans for sorting
+
+        // Language Setup
+        this.langBtn = document.getElementById('lang-toggle');
+        this.langText = this.langBtn.querySelector('.lang-text');
+        this.lang = 'en'; // Default
+
+        this.translations = {
+            en: {
+                timer: "Timer",
+                stopwatch: "Stopwatch",
+                todo: "Todo",
+                plan: "Plan",
+                hr: "hr",
+                min: "min",
+                sec: "sec",
+                startTimer: "Start Timer",
+                startStopwatch: "Start Stopwatch",
+                startSession: "Start Session",
+                todoPlaceholder: "Add a task...",
+                planSubjectPlaceholder: "Math, English...",
+                days: { "Mon": "Mon", "Tue": "Tue", "Wed": "Wed", "Thu": "Thu", "Fri": "Fri", "Sat": "Sat", "Sun": "Sun" }
+            },
+            ko: {
+                timer: "타이머",
+                stopwatch: "스톱워치",
+                todo: "할 일",
+                plan: "계획",
+                hr: "시간",
+                min: "분",
+                sec: "초",
+                startTimer: "타이머 시작",
+                startStopwatch: "스톱워치 시작",
+                startSession: "세션 시작",
+                todoPlaceholder: "할 일을 추가하세요...",
+                planSubjectPlaceholder: "수학, 영어...",
+                days: { "Mon": "월", "Tue": "화", "Wed": "수", "Thu": "목", "Fri": "금", "Sat": "토", "Sun": "일" }
+            }
+        };
+
         this.init();
     }
 
@@ -80,6 +121,7 @@ class Timer {
         this.modePlannerBtn.addEventListener('click', () => this.setMode('planner'));
 
         this.themeBtn.addEventListener('click', () => this.toggleTheme());
+        this.langBtn.addEventListener('click', () => this.toggleLanguage());
 
         // Planner
         this.addPlanBtn.addEventListener('click', () => this.addPlan());
@@ -124,6 +166,86 @@ class Timer {
         }
     }
 
+
+
+    toggleLanguage() {
+        const elementsToAnimate = [
+            this.modeTimerBtn,
+            this.modeStopwatchBtn,
+            this.modeTodoBtn,
+            this.modePlannerBtn,
+            this.startBtn,
+            this.langText,
+            ...document.querySelectorAll('.label'),
+            ...document.querySelectorAll('.day-header')
+        ];
+
+        // Add transition class to enable animation
+        elementsToAnimate.forEach(el => el.classList.add('text-element'));
+
+        // Trigger Fade Out
+        elementsToAnimate.forEach(el => el.classList.add('lang-fade'));
+
+        // Wait for fade out, then change text and fade in
+        setTimeout(() => {
+            this.lang = this.lang === 'en' ? 'ko' : 'en';
+            this.langText.innerText = this.lang === 'en' ? 'KO' : 'EN';
+            this.applyLanguage();
+
+            // Trigger Fade In
+            elementsToAnimate.forEach(el => el.classList.remove('lang-fade'));
+        }, 300);
+    }
+
+    applyLanguage() {
+        const t = this.translations[this.lang];
+
+        // Mode Buttons
+        this.modeTimerBtn.innerText = t.timer;
+        this.modeStopwatchBtn.innerText = t.stopwatch;
+        this.modeTodoBtn.innerText = t.todo;
+        this.modePlannerBtn.innerText = t.plan;
+
+        // Labels
+        document.querySelectorAll('.label').forEach(label => {
+            if (label.innerText === 'hr' || label.innerText === '시간') label.innerText = t.hr;
+            if (label.innerText === 'min' || label.innerText === '분') label.innerText = t.min;
+            if (label.innerText === 'sec' || label.innerText === '초') label.innerText = t.sec;
+        });
+
+        // Placeholders
+        this.todoInput.placeholder = t.todoPlaceholder;
+        this.planSubject.placeholder = t.planSubjectPlaceholder;
+
+        // Update Start Button Text based on current mode
+        if (this.mode === 'timer') {
+            this.startBtn.innerText = t.startTimer;
+        } else if (this.mode === 'stopwatch') {
+            this.startBtn.innerText = t.startStopwatch;
+        } else {
+            this.startBtn.innerText = t.startSession; // Default/Hidden
+        }
+
+        // Planner Days (Headers)
+        document.querySelectorAll('.day-header').forEach(header => {
+            // Check mapping
+            // This is tricky because innerText might be already translated.
+            // We can trust data-day attribute if we added it? We did: data-day="Mon"
+            const col = header.parentElement;
+            const dayKey = col.getAttribute('data-day');
+            if (dayKey && t.days[dayKey]) {
+                header.innerText = t.days[dayKey];
+            }
+        });
+
+        // Planner Select Options
+        Array.from(this.planDay.options).forEach(option => {
+            if (t.days[option.value]) {
+                option.innerText = t.days[option.value];
+            }
+        });
+    }
+
     setMode(mode) {
         if (this.mode === mode) return; // Don't animate if clicking same mode
         this.mode = mode;
@@ -160,11 +282,11 @@ class Timer {
         if (mode === 'timer') {
             this.modeTimerBtn.classList.add('active');
             this.timerInputs.classList.remove('hidden');
-            this.startBtn.innerText = "Start Timer";
+            this.startBtn.innerText = this.translations[this.lang].startTimer;
         } else if (mode === 'stopwatch') {
             this.modeStopwatchBtn.classList.add('active');
             this.stopwatchPreview.classList.remove('hidden');
-            this.startBtn.innerText = "Start Stopwatch";
+            this.startBtn.innerText = this.translations[this.lang].startStopwatch;
         } else if (mode === 'todo') {
             this.modeTodoBtn.classList.add('active');
             this.todoContainer.classList.remove('hidden');
@@ -186,26 +308,43 @@ class Timer {
 
         if (!subject || !time) return;
 
-        const tr = document.createElement('tr');
-
-        tr.innerHTML = `
-            <td>${day}</td>
-            <td>${time}</td>
-            <td>${subject}</td>
-            <td style="text-align: right;">
-                <button class="plan-delete-btn">&times;</button>
-            </td>
-        `;
-
-        tr.querySelector('.plan-delete-btn').addEventListener('click', () => {
-            tr.remove();
-        });
-
-        this.plannerList.appendChild(tr);
+        // Add to array
+        this.plans.push({ subject, day, time, id: Date.now() });
+        this.renderPlans();
 
         // Clear inputs
         this.planSubject.value = '';
         this.planTime.value = '';
+    }
+
+    renderPlans() {
+        // Clear all columns
+        document.querySelectorAll('.day-content').forEach(col => col.innerHTML = '');
+
+        // Sort plans: Time only (since they are separated by columns)
+        this.plans.sort((a, b) => a.time.localeCompare(b.time));
+
+        this.plans.forEach(plan => {
+            const column = document.querySelector(`.day-column[data-day="${plan.day}"] .day-content`);
+            if (column) {
+                const block = document.createElement('div');
+                block.className = 'plan-block';
+                block.innerHTML = `
+                    <div class="plan-time">${plan.time}</div>
+                    <div class="plan-subject">${plan.subject}</div>
+                    <button class="plan-block-delete" data-id="${plan.id}">&times;</button>
+                `;
+
+                // Delete handler
+                block.querySelector('.plan-block-delete').addEventListener('click', (e) => {
+                    const id = Number(e.target.getAttribute('data-id'));
+                    this.plans = this.plans.filter(p => p.id !== id);
+                    this.renderPlans();
+                });
+
+                column.appendChild(block);
+            }
+        });
     }
 
     addTodo(text) {
@@ -394,10 +533,26 @@ class Timer {
         }
 
         // Analog Logic
-        // Let's emulate a real clock face showing remaining time?
-        // If 5 mins remaining, minute hand at 5?
-        const minDeg = (m / 60) * 360;
-        const sDeg = (s / 60) * 360;
+        // Use continuous rotation to avoid 360->0 jumps
+        // For Timer: remaining decreases, so rotation decreases (CCW).
+        // For Stopwatch: elapsed increases, so rotation increases (CW). 
+        // We add an offset to align 0 with top (default behavior of rotate).
+
+        let totalMin, totalSec;
+
+        if (this.mode === 'timer') {
+            // To make it feel 'right', maybe we want CW movement? 
+            // unique aesthetics: Countdown spins CCW is confusing? 
+            // Let's just map to total seconds.
+            totalSec = this.remaining;
+            totalMin = this.remaining / 60;
+        } else {
+            totalSec = this.elapsed;
+            totalMin = this.elapsed / 60;
+        }
+
+        const minDeg = totalMin * 6; // 6 deg per minute (360/60)
+        const sDeg = totalSec * 6;   // 6 deg per second
 
         this.minHand.style.transform = `rotate(${minDeg}deg)`;
         this.secHand.style.transform = `rotate(${sDeg}deg)`;
@@ -433,3 +588,4 @@ class Timer {
 document.addEventListener('DOMContentLoaded', () => {
     new Timer();
 });
+
