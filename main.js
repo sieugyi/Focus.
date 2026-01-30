@@ -48,6 +48,7 @@ class Timer {
         // Session & History
         this.currentSessionName = '';
         this.currentSessionRating = 0;
+        this.lastPreviewRating = 0;
         this.history = []; // Will load on init if logged in
 
         // Pomodoro properties
@@ -360,6 +361,19 @@ class Timer {
                     const rating = parseInt(e.target.dataset.rating);
                     this.setRating(rating);
                 });
+            });
+
+            const starContainer = this.ratingStars[0].parentElement;
+            starContainer.addEventListener('mousemove', (e) => {
+                const rect = starContainer.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const width = rect.width;
+                const rating = Math.ceil((x / width) * 5);
+                this.setPreviewRating(Math.max(1, Math.min(5, rating)));
+            });
+
+            starContainer.addEventListener('mouseleave', () => {
+                this.setPreviewRating(0);
             });
         }
 
@@ -932,13 +946,39 @@ class Timer {
     }
 
     setRating(rating) {
+        if (this.currentSessionRating === rating) return;
         this.currentSessionRating = rating;
+        this.updateStars(rating, 'active');
+    }
+
+    setPreviewRating(rating) {
+        if (this.lastPreviewRating === rating) return;
+        this.lastPreviewRating = rating;
+
+        if (rating === 0) {
+            // Clear preview, show actual rating
+            this.updateStars(0, 'preview');
+            this.updateStars(this.currentSessionRating, 'active');
+        } else {
+            this.updateStars(rating, 'preview');
+        }
+    }
+
+    updateStars(rating, className) {
         this.ratingStars.forEach(star => {
             const starRating = parseInt(star.dataset.rating);
-            if (starRating <= rating) {
-                star.classList.add('active');
+            if (className === 'preview') {
+                if (starRating <= rating) {
+                    star.classList.add('preview');
+                } else {
+                    star.classList.remove('preview');
+                }
             } else {
-                star.classList.remove('active');
+                if (starRating <= rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
             }
         });
     }
@@ -1096,8 +1136,8 @@ class Timer {
             this.digitalDisplay.textContent = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
         }
 
-        const minDeg = (m / 60) * 360;
-        const sDeg = (s / 60) * 360;
+        const sDeg = displaySeconds * 6;
+        const minDeg = displaySeconds * 0.1;
 
         this.minHand.style.transform = `rotate(${minDeg}deg)`;
         this.secHand.style.transform = `rotate(${sDeg}deg)`;
