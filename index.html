@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focus.</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="theme-btn" aria-label="Toggle Dark Mode">
+            <svg class="sun-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg class="moon-icon hidden" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </button>
+
+        <!-- View Toggle -->
+        <div class="view-toggle">
+            <button id="toggle-analog" class="toggle-btn" aria-label="Analog View">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+            </button>
+            <button id="toggle-digital" class="toggle-btn active" aria-label="Digital View">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                    <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Setup Screen -->
+        <div id="setup-screen" class="screen active">
+            <h1 class="logo">Focus.</h1>
+            <!-- Mode Switcher -->
+            <div class="mode-switcher">
+                <button id="mode-timer" class="mode-btn active">Timer</button>
+                <button id="mode-stopwatch" class="mode-btn">Stopwatch</button>
+                <button id="mode-todo" class="mode-btn">Todo</button>
+                <button id="mode-planner" class="mode-btn">Plan</button>
+            </div>
+
+            <!-- Timer Inputs -->
+            <div class="input-container" id="timer-inputs">
+                <div class="time-input-container">
+                    <div class="input-group">
+                        <input type="number" id="input-hours" placeholder="00" min="0" max="99">
+                        <span class="label">hr</span>
+                    </div>
+                    <span class="separator">:</span>
+                    <div class="input-group">
+                        <input type="number" id="input-minutes" placeholder="25" min="0" max="59">
+                        <span class="label">min</span>
+                    </div>
+                    <span class="separator">:</span>
+                    <div class="input-group">
+                        <input type="number" id="input-seconds" placeholder="00" min="0" max="59">
+                        <span class="label">sec</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stopwatch Placeholder (Visual only, no inputs needed) -->
+            <div id="stopwatch-preview" class="stopwatch-preview hidden">
+                <span class="preview-time">00:00:00</span>
+            </div>
+
+            <!-- Todo Container -->
+            <div id="todo-container" class="todo-container hidden">
+                <div class="todo-input-group">
+                    <input type="text" id="todo-input" placeholder="Add a task..." autocomplete="off">
+                </div>
+                <ul id="todo-list" class="todo-list">
+                    <!-- Tasks will go here -->
+                </ul>
+            </div>
+
+            <!-- Planner Container -->
+            <div id="planner-container" class="planner-container hidden">
+                <div class="planner-inputs">
+                    <input type="text" id="plan-subject" placeholder="Math, English..." class="plan-input-text">
+                    <div class="plan-time-group">
+                        <select id="plan-day" class="plan-select">
+                            <option value="Mon">Mon</option>
+                            <option value="Tue">Tue</option>
+                            <option value="Wed">Wed</option>
+                            <option value="Thu">Thu</option>
+                            <option value="Fri">Fri</option>
+                            <option value="Sat">Sat</option>
+                            <option value="Sun">Sun</option>
+                        </select>
+                        <input type="time" id="plan-time" class="plan-input-time">
+                    </div>
+                    <button id="add-plan-btn" class="add-plan-btn">+</button>
+                </div>
+
+                <div class="planner-table-container">
+                    <table id="planner-table">
+                        <thead>
+                            <tr>
+                                <th>When</th>
+                                <th>Time</th>
+                                <th>What</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="planner-list">
+                            <!-- Plans go here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <button id="start-btn" class="primary-btn">Start Session</button>
+        </div>
+
+        <!-- Timer Screen -->
+        <div id="timer-screen" class="screen hidden">
+            <div class="timer-display-container">
+                <!-- Digital Timer -->
+                <div id="digital-display" class="timer-view active">
+                    <span id="time-remaining">25:00</span>
+                </div>
+
+                <!-- Analog Timer -->
+                <div id="analog-display" class="timer-view hidden">
+                    <div class="clock-face">
+                        <div class="hand-container">
+                            <div class="hand second-hand"></div>
+                            <div class="hand minute-hand"></div>
+                        </div>
+                        <div class="center-dot"></div>
+                        <svg class="progress-ring" width="300" height="300">
+                            <circle class="progress-ring__circle" stroke="currentColor" stroke-width="4"
+                                fill="transparent" r="140" cx="150" cy="150" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button id="pause-btn" class="control-btn" aria-label="Pause/Resume">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="6" y="4" width="4" height="16"></rect>
+                        <rect x="14" y="4" width="4" height="16"></rect>
+                    </svg>
+                </button>
+                <button id="reset-btn" class="control-btn" aria-label="Reset">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 12"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
