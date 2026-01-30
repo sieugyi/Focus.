@@ -65,8 +65,34 @@ body {
     cursor: pointer;
     transition: color 0.3s, transform 0.3s;
     padding: 8px;
+    padding: 8px;
     z-index: 10;
 }
+
+/* Language Toggle */
+.lang-btn {
+    position: absolute;
+    top: 40px;
+    left: 90px;
+    /* Positioned next to theme toggle */
+    background: transparent;
+    border: none;
+    color: var(--secondary-text);
+    cursor: pointer;
+    transition: color 0.3s, transform 0.3s;
+    padding: 8px;
+    z-index: 10;
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.lang-btn:hover {
+    color: var(--text-color);
+    transform: scale(1.1);
+}
+
+
 
 .theme-btn:hover {
     color: var(--text-color);
@@ -376,8 +402,8 @@ body {
 /* Planner Styles */
 .planner-container {
     width: 100%;
-    max-width: 380px;
-    /* Slightly wider for table */
+    max-width: 800px;
+    /* Wider for timetable */
     margin-bottom: 40px;
     animation: fadeIn 0.5s forwards;
 }
@@ -451,79 +477,99 @@ body {
     transform: scale(1.1);
 }
 
-.planner-table-container {
-    max-height: 300px;
-    overflow-y: auto;
-    scrollbar-width: none;
-}
-
-.planner-table-container::-webkit-scrollbar {
-    display: none;
-}
-
-#planner-table {
+/* Timetable Styles */
+.planner-timetable {
     width: 100%;
-    border-collapse: collapse;
-    text-align: left;
+    overflow-x: auto;
+    padding-bottom: 12px;
 }
 
-#planner-table th {
-    font-weight: 500;
-    font-size: 0.8rem;
+.timetable-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(100px, 1fr));
+    gap: 8px;
+    min-width: 700px;
+    /* Ensure structure holds */
+}
+
+.day-column {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.day-header {
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 600;
     color: var(--secondary-text);
-    padding: 12px 0;
+    padding-bottom: 8px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-[data-theme="dark"] #planner-table th {
+[data-theme="dark"] .day-header {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-#planner-table td {
-    padding: 16px 0;
-    font-weight: 300;
-    font-size: 1rem;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+.day-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 200px;
 }
 
-[data-theme="dark"] #planner-table td {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+.plan-block {
+    background: rgba(0, 0, 0, 0.03);
+    border-left: 3px solid var(--text-color);
+    padding: 10px;
+    border-radius: 4px;
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.plan-day-badge {
-    background: rgba(0, 0, 0, 0.05);
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    font-weight: 500;
+[data-theme="dark"] .plan-block {
+    background: rgba(255, 255, 255, 0.05);
 }
 
-[data-theme="dark"] .plan-day-badge {
-    background: rgba(255, 255, 255, 0.1);
+.plan-block:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.plan-time-cell {
+.plan-time {
+    font-size: 0.8rem;
+    color: var(--secondary-text);
+    margin-bottom: 4px;
     font-variant-numeric: tabular-nums;
-    font-weight: 400;
 }
 
-.plan-subject-cell {
+.plan-subject {
+    font-size: 0.95rem;
     font-weight: 500;
+    word-break: break-word;
+    /* Prevent overflow */
 }
 
-.plan-delete-btn {
-    background: transparent;
+.plan-block-delete {
+    position: absolute;
+    top: 4px;
+    right: 4px;
     border: none;
+    background: transparent;
     color: var(--secondary-text);
     cursor: pointer;
-    opacity: 0.5;
-    font-size: 1.2rem;
-    transition: color 0.2s;
+    opacity: 0;
+    transition: opacity 0.2s, color 0.2s;
+    font-size: 1rem;
+    padding: 4px;
 }
 
-.plan-delete-btn:hover {
-    color: #ff3b30;
+.plan-block:hover .plan-block-delete {
     opacity: 1;
+}
+
+.plan-block-delete:hover {
+    color: #ff3b30;
 }
 
 /* Time Input Container */
@@ -712,8 +758,8 @@ body {
     transform-origin: bottom center;
     background-color: var(--text-color);
     border-radius: 4px;
-    transition: transform 0.05s cubic-bezier(0.4, 2.08, 0.55, 0.44);
-    /* Tick effect */
+    transition: transform 0.1s ease-out;
+    /* Strict no overshoot */
 }
 
 .minute-hand {
@@ -751,7 +797,17 @@ body {
 .control-btn {
     background: transparent;
     border: 1px solid var(--secondary-text);
-    /* Very thin border */
+
+    /* Language Animation Class */
+    .lang-fade {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    .text-element {
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
     color: var(--text-color);
     width: 64px;
     height: 64px;
