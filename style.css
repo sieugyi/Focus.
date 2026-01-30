@@ -33,24 +33,38 @@ body {
     font-family: var(--font-family);
     background-color: var(--bg-color);
     color: var(--text-color);
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    overflow-x: hidden;
     transition: background-color var(--transition-speed), color var(--transition-speed);
+    padding: 0 20px;
 }
 
 .app-container {
     width: 100%;
     max-width: 480px;
-    height: 100vh;
-    /* Mobile full height */
+    min-height: 100vh;
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+}
+
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Theme Toggle */
@@ -58,13 +72,11 @@ body {
     position: absolute;
     top: 40px;
     left: 40px;
-    /* Symmetry with view toggle */
     background: transparent;
     border: none;
     color: var(--secondary-text);
     cursor: pointer;
     transition: color 0.3s, transform 0.3s;
-    padding: 8px;
     padding: 8px;
     z-index: 10;
 }
@@ -74,7 +86,6 @@ body {
     position: absolute;
     top: 40px;
     left: 90px;
-    /* Positioned next to theme toggle */
     background: transparent;
     border: none;
     color: var(--secondary-text);
@@ -91,8 +102,6 @@ body {
     color: var(--text-color);
     transform: scale(1.1);
 }
-
-
 
 .theme-btn:hover {
     color: var(--text-color);
@@ -156,14 +165,13 @@ body {
 
 .screen.hidden {
     display: none;
-    /* Helper for JS state */
 }
 
 /* Setup Screen */
 .logo {
     font-weight: 600;
     font-size: 2rem;
-    margin-bottom: 60px;
+    margin-bottom: 20px;
     letter-spacing: -0.05em;
     font-feature-settings: "tnum";
     font-variant-numeric: tabular-nums;
@@ -181,10 +189,9 @@ body {
 .mode-switcher {
     display: flex;
     background: rgba(0, 0, 0, 0.05);
-    /* Very subtle background */
     padding: 4px;
     border-radius: 100px;
-    margin-bottom: 60px;
+    margin-bottom: 20px;
 }
 
 .mode-btn {
@@ -207,7 +214,6 @@ body {
 
 /* Input Container Transition */
 .input-container {
-    /* Use animation instead of transition for smoother display:none handling */
     animation: fadeIn 0.5s forwards;
 }
 
@@ -234,7 +240,6 @@ body {
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.05em;
     opacity: 0.5;
-    /* Dimmed state for preview */
 }
 
 @keyframes fadeIn {
@@ -255,12 +260,144 @@ body {
     max-width: 320px;
     margin-bottom: 40px;
     animation: fadeIn 0.5s forwards;
-    /* Allow scrolling if list gets long */
     max-height: 400px;
     overflow-y: auto;
-    /* Hide scrollbar for clean look */
     scrollbar-width: none;
     -ms-overflow-style: none;
+}
+
+/* Pomodoro Styles */
+.pomodoro-container {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 20px;
+    animation: fadeIn 0.5s forwards;
+}
+
+.pomodoro-container.hidden {
+    display: none;
+}
+
+.pomodoro-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 20px;
+    max-height: 500px;
+    overflow-y: auto;
+    padding-right: 4px;
+    /* Space for scrollbar if visible */
+    scrollbar-width: thin;
+}
+
+.pomodoro-setting-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="dark"] .pomodoro-setting-group {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pomodoro-label {
+    font-size: 1rem;
+    color: var(--text-color);
+    font-weight: 400;
+}
+
+.pomodoro-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pomodoro-input {
+    width: 60px;
+    background: transparent;
+    border: 1px solid var(--secondary-text);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: var(--font-family);
+    font-size: 1.1rem;
+    color: var(--text-color);
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.pomodoro-input::-webkit-outer-spin-button,
+.pomodoro-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.pomodoro-input:focus {
+    border-color: var(--text-color);
+}
+
+.pomodoro-unit {
+    font-size: 0.9rem;
+    color: var(--secondary-text);
+    min-width: 50px;
+}
+
+.pomodoro-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 24px;
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 16px;
+    margin-bottom: 20px;
+}
+
+[data-theme="dark"] .pomodoro-preview {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.pomodoro-cycle-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cycle-label {
+    font-size: 0.9rem;
+    color: var(--secondary-text);
+    font-weight: 500;
+}
+
+.cycle-count {
+    font-size: 1.5rem;
+    color: var(--text-color);
+    font-weight: 600;
+    font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
+}
+
+.pomodoro-status {
+    font-size: 1.2rem;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+/* Status color indicators */
+.pomodoro-status.focus {
+    color: #ff3b30;
+}
+
+.pomodoro-status.break {
+    color: #34c759;
+}
+
+.pomodoro-status.long-break {
+    color: #007aff;
 }
 
 .todo-container::-webkit-scrollbar {
@@ -382,28 +519,18 @@ body {
 
 .delete-btn:hover {
     color: #ff3b30;
-    /* Destructive red */
 }
 
-/* On specific touch devices or if hover isn't available, we might want it visible, 
-   but for "Cleanest" desktop focus, hover is good. 
-   Let's add a media query for coarse pointers to always show it? 
-   No, let's keep it clean. User can tap the text to toggle. 
-   Maybe long press? For now, stick to hover for desktop primary.
-*/
 @media (hover: none) {
     .delete-btn {
         opacity: 1;
-        /* Always show on touch devices */
     }
 }
-
 
 /* Planner Styles */
 .planner-container {
     width: 100%;
     max-width: 800px;
-    /* Wider for timetable */
     margin-bottom: 40px;
     animation: fadeIn 0.5s forwards;
 }
@@ -489,7 +616,6 @@ body {
     grid-template-columns: repeat(7, minmax(100px, 1fr));
     gap: 8px;
     min-width: 700px;
-    /* Ensure structure holds */
 }
 
 .day-column {
@@ -547,7 +673,6 @@ body {
     font-size: 0.95rem;
     font-weight: 500;
     word-break: break-word;
-    /* Prevent overflow */
 }
 
 .plan-block-delete {
@@ -576,23 +701,23 @@ body {
 .time-input-container {
     display: flex;
     align-items: center;
-    /* Align inputs and separators vertically */
     justify-content: center;
     gap: 10px;
     margin-bottom: 80px;
+    width: 100%;
+    max-width: 400px;
 }
 
 .input-group {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 120px;
-    /* Fixed width for stability */
+    flex: 1;
+    max-width: 120px;
 }
 
 .input-group input {
     font-size: 5rem;
-    /* Slightly smaller to fit 3 items */
     font-weight: 200;
     background: transparent;
     border: none;
@@ -624,30 +749,13 @@ body {
     font-weight: 200;
     color: var(--secondary-text);
     margin-top: -1.5rem;
-    /* Visual alignment with numbers */
 }
 
-/* Adjust labels */
 .label {
     font-size: 1rem;
     color: var(--secondary-text);
     margin-top: 0px;
     font-weight: 400;
-}
-
-/* Mobile Adjustment for inputs */
-@media (max-width: 480px) {
-    .input-group {
-        width: 80px;
-    }
-
-    .input-group input {
-        font-size: 3.5rem;
-    }
-
-    .separator {
-        font-size: 3rem;
-    }
 }
 
 .primary-btn {
@@ -670,7 +778,8 @@ body {
 /* Timer Screen */
 .timer-display-container {
     position: relative;
-    width: 320px;
+    width: 100%;
+    max-width: 320px;
     height: 320px;
     display: flex;
     justify-content: center;
@@ -710,10 +819,10 @@ body {
 
 /* Analog Display */
 .clock-face {
-    width: 300px;
-    height: 300px;
+    width: 100%;
+    max-width: 300px;
+    aspect-ratio: 1;
     position: relative;
-    /* Border or shadow can be added here if desired, but keeping it ultra clean */
 }
 
 .progress-ring {
@@ -721,22 +830,17 @@ body {
     top: 0;
     left: 0;
     transform: rotate(-90deg);
-    /* Start at top */
+    width: 100%;
+    height: 100%;
 }
 
 .progress-ring__circle {
     transition: stroke-dashoffset 0.1s linear;
-    /* Smooth update */
     transform-origin: 50% 50%;
     stroke: var(--text-color);
     stroke-linecap: round;
     opacity: 0.1;
-    /* Track opacity */
 }
-
-/* We need another circle for the actual progress if we want a track */
-/* But for "Cleanest", maybe just the hand movement or a subtle ring?
-   Let's use the ring as the countdown indicator. */
 
 .progress-ring__circle.active-ring {
     stroke: var(--text-color);
@@ -759,7 +863,6 @@ body {
     background-color: var(--text-color);
     border-radius: 4px;
     transition: transform 0.1s ease-out;
-    /* Strict no overshoot */
 }
 
 .minute-hand {
@@ -772,7 +875,6 @@ body {
     width: 2px;
     height: 130px;
     background-color: #ff3b30;
-    /* Subtle accent for seconds like Swiss clock */
     margin-left: -1px;
 }
 
@@ -797,17 +899,6 @@ body {
 .control-btn {
     background: transparent;
     border: 1px solid var(--secondary-text);
-
-    /* Language Animation Class */
-    .lang-fade {
-        opacity: 0;
-        transform: translateY(-5px);
-    }
-
-    .text-element {
-        transition: opacity 0.3s ease, transform 0.3s ease;
-    }
-
     color: var(--text-color);
     width: 64px;
     height: 64px;
@@ -819,16 +910,606 @@ body {
     transition: all 0.3s ease;
 }
 
+/* Language Animation Classes */
+.lang-fade {
+    animation: langFadeOut 0.3s ease forwards;
+}
+
+@keyframes langFadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes langFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.text-element {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.text-element.lang-entering {
+    animation: langFadeIn 0.3s ease forwards;
+}
+
 .control-btn:hover {
     border-color: var(--text-color);
     background-color: var(--text-color);
     color: var(--bg-color);
 }
 
+/* Mobile Responsive Adjustments */
 @media (max-width: 480px) {
+    body {
+        padding: 0 16px;
+    }
 
-    #input-minutes,
+    .theme-btn,
+    .lang-btn {
+        top: 20px;
+        left: 20px;
+    }
+
+    .lang-btn {
+        left: 60px;
+    }
+
+    .view-toggle {
+        top: 20px;
+        right: 20px;
+    }
+
+    .time-input-container {
+        gap: 6px;
+        max-width: 100%;
+        padding: 0 10px;
+    }
+
+    .input-group {
+        max-width: 80px;
+        min-width: 60px;
+    }
+
+    .input-group input {
+        font-size: 3rem;
+    }
+
+    .separator {
+        font-size: 2.5rem;
+        margin-top: -1rem;
+    }
+
+    .label {
+        font-size: 0.8rem;
+    }
+
     #time-remaining {
-        font-size: 5rem;
+        font-size: 4rem;
+    }
+
+    .timer-display-container {
+        width: 100%;
+        max-width: 280px;
+        height: 280px;
+    }
+
+    .clock-face {
+        max-width: 260px;
+    }
+
+    .minute-hand {
+        height: 90px;
+    }
+
+    .second-hand {
+        height: 100px;
+    }
+
+    .control-btn {
+        width: 56px;
+        height: 56px;
+    }
+
+    .controls {
+        gap: 24px;
+    }
+
+    .primary-btn {
+        padding: 14px 36px;
+        font-size: 1rem;
+    }
+
+    .logo {
+        font-size: 1.6rem;
+        margin-bottom: 40px;
+    }
+
+    .preview-time {
+        font-size: 3.5rem;
+    }
+
+    .pomodoro-container {
+        max-width: 100%;
+        padding: 0 10px;
+    }
+
+    .pomodoro-label {
+        font-size: 0.9rem;
+    }
+
+    .pomodoro-input {
+        width: 50px;
+        font-size: 1rem;
+        padding: 6px 8px;
+    }
+
+    .pomodoro-unit {
+        font-size: 0.8rem;
+        min-width: 40px;
+    }
+
+    .pomodoro-status {
+        font-size: 1rem;
+    }
+
+    .cycle-count {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .input-group input {
+        font-size: 2.5rem;
+    }
+
+    .separator {
+        font-size: 2rem;
+    }
+
+    #time-remaining {
+        font-size: 3.5rem;
+    }
+}
+
+/* Session Name Input */
+.session-name-container {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 20px;
+    animation: fadeIn 0.5s forwards;
+    padding: 0 20px;
+}
+
+.session-name-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+    font-family: var(--font-family);
+    font-size: 1.2rem;
+    padding: 10px 0;
+    color: var(--text-color);
+    outline: none;
+    text-align: center;
+    transition: border-color 0.3s;
+}
+
+[data-theme="dark"] .session-name-input {
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.session-name-input:focus {
+    border-bottom-color: var(--text-color);
+}
+
+.session-name-input::placeholder {
+    color: var(--secondary-text);
+    opacity: 0.5;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.modal-content {
+    background: var(--surface-color);
+    padding: 30px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 320px;
+    text-align: center;
+    box-shadow: var(--shadow-hover);
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1);
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+
+.modal-subtitle {
+    color: var(--secondary-text);
+    margin-bottom: 20px;
+}
+
+/* Star Rating */
+.star-rating {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.star {
+    font-size: 2rem;
+    color: var(--secondary-text);
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+}
+
+.star.active,
+.star:hover {
+    color: #ff9500;
+    /* iOS Gold Color */
+    transform: scale(1.1);
+}
+
+.modal-btn {
+    background: var(--text-color);
+    color: var(--bg-color);
+    border: none;
+    padding: 12px 32px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.modal-btn:hover {
+    transform: scale(1.05);
+}
+
+/* History View */
+.history-view {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 380px;
+    height: 100vh;
+    background: var(--surface-color);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+    z-index: 50;
+    padding: 30px;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.history-view.active {
+    transform: translateX(0);
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] .history-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.history-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--secondary-text);
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-btn:hover {
+    color: var(--text-color);
+}
+
+.history-list {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.history-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.history-list::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+}
+
+[data-theme="dark"] .history-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.history-item {
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    animation: fadeIn 0.3s forwards;
+    border: 1px solid transparent;
+}
+
+[data-theme="dark"] .history-item {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.history-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.history-name {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--text-color);
+}
+
+.history-date {
+    font-size: 0.8rem;
+    color: var(--secondary-text);
+}
+
+.history-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.history-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.history-delete-btn {
+    background: transparent;
+    border: none;
+    color: var(--secondary-text);
+    cursor: pointer;
+    padding: 2px;
+    opacity: 0.4;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.history-delete-btn:hover {
+    color: #ff3b30;
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+
+.history-duration {
+    font-size: 0.9rem;
+    color: var(--secondary-text);
+    font-feature-settings: "tnum";
+}
+
+.history-stars {
+    color: #ff9500;
+    font-size: 0.9rem;
+}
+
+.empty-history {
+    text-align: center;
+    color: var(--secondary-text);
+    margin-top: 50px;
+}
+
+/* Auth Screen */
+.auth-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+    background: var(--bg-color);
+    transition: opacity 0.5s ease;
+}
+
+.auth-screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+    display: none;
+}
+
+/* .auth-logo removed, replaced by image */
+.auth-logo-img {
+    width: 60%;
+    max-width: 300px;
+    /* Increased max size for better visibility */
+    height: auto;
+    margin-bottom: 0;
+    animation: fadeIn 0.5s forwards;
+    display: block;
+}
+
+
+.auth-form-container {
+    width: 100%;
+    max-width: 360px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    animation: fadeIn 0.5s forwards;
+}
+
+.auth-form-container.hidden {
+    display: none;
+}
+
+.auth-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.auth-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--secondary-text);
+    padding: 12px 0;
+    font-family: var(--font-family);
+    font-size: 1.1rem;
+    color: var(--text-color);
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.auth-input:focus {
+    border-color: var(--text-color);
+}
+
+.auth-input::placeholder {
+    color: var(--secondary-text);
+    opacity: 0.5;
+}
+
+.auth-btn {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.auth-switch {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: var(--secondary-text);
+}
+
+.link {
+    color: var(--text-color);
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+/* Logout Button */
+.logout-btn {
+    position: absolute;
+    top: 40px;
+    left: 140px;
+    background: transparent;
+    border: none;
+    color: var(--secondary-text);
+    cursor: pointer;
+    transition: color 0.3s, transform 0.3s;
+    padding: 8px;
+    z-index: 10;
+}
+
+.logout-btn:hover {
+    color: #ff3b30;
+    transform: translateX(-2px);
+}
+
+@media (max-width: 480px) {
+    .theme-btn {
+        top: 20px;
+        left: 20px;
+    }
+
+    .lang-btn {
+        top: 20px;
+        left: 65px;
+        /* Adjusted to be closer */
+    }
+
+    .logout-btn {
+        top: 20px;
+        left: 105px;
+        /* Adjusted to follow lang btn */
+    }
+
+    .view-toggle {
+        top: 20px;
+        right: 20px;
+        gap: 8px;
+        /* Reduce gap */
+    }
+
+    .toggle-btn {
+        padding: 4px;
+        /* Reduce padding */
+    }
+
+    .app-container {
+        padding-top: 80px;
+        /* Ensure content doesn't hit buttons */
     }
 }
