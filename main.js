@@ -197,7 +197,12 @@ class Timer {
                 sessionComplete: 'Session Complete!',
                 howWasFocus: 'How was your focus?',
                 sessionNamePlaceholder: 'Session Name (Optional)',
-                exportExcel: 'Export Excel'
+                exportExcel: 'Export Excel',
+                mtimer: 'Timer',
+                mpomodoro: 'Pomodoro',
+                mstopwatch: 'Stopwatch',
+                mtodo: 'Todo',
+                mplan: 'Plan'
             },
             ko: {
                 logoTimer: '집중.',
@@ -231,7 +236,12 @@ class Timer {
                 sessionComplete: '세션 종료!',
                 howWasFocus: '집중도는 어땠나요?',
                 sessionNamePlaceholder: '세션 이름 (선택사항)',
-                exportExcel: 'Excel 내보내기'
+                exportExcel: 'Excel 내보내기',
+                mtimer: '타이머',
+                mpomodoro: '뽀모도로',
+                mstopwatch: '스톱워치',
+                mtodo: '할 일',
+                mplan: '일정'
             }
         };
 
@@ -1168,3 +1178,4 @@ class Timer {
 document.addEventListener('DOMContentLoaded', () => {
     new Timer();
 });
+
